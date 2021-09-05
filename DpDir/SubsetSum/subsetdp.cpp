@@ -1,52 +1,42 @@
 #include <iostream>
 #include <vector>
-#include <unordered_map>
 using namespace std;
 
-bool subsetSumUtil(int i, int num[], int n, int target,vector<int>& soln,vector<int>& memo){
-    if(i > n || target < 0) return false;
-    if(target == 0) return true;
-    if(memo[target] != -1) return memo[target];
-
-
-    if(subsetSumUtil(i+1,num,n,target-num[i],soln,memo)){
-        soln.push_back(num[i]);
-        memo[target] = 1;
-        return true;
-    }
-    else if(subsetSumUtil(i+1,num,n,target,soln,memo)){
-        memo[target] = true;
-        return true;
-    }
-    memo[target] = 0;
-    return false;
-
-}
-void subsetSum(int sum, int num[], int n){
-    vector<int> soln;
-    soln.clear();
-    vector<int> memo(sum+1,-1);
-    if(subsetSumUtil(0,num,n,sum,soln,memo)){
-        for(int i = soln.size()-1; i >= 0; i--){
-            cout<<soln[i]<<" ";
+bool subsetSum(int nums[], int target, int n){
+    vector<vector<bool>> dp(n + 1, vector<bool>(target + 1));
+    for(int i{}; i <= n; i++){
+        for(int j{}; j <= target; j++){
+            if(i == 0 && j == 0) dp[i][j] = true;
+            else if(i == 0) dp[i][j] = false;
+            else if(j == 0) dp[i][j] = true;
+            else{
+                dp[i][j] = dp[i - 1][j];
+                if(nums[i - 1] <= j){
+                    dp[i][j] = dp[i - 1][j] || dp[i - 1][j - nums[i - 1]];
+                }
+            }
         }
-        cout << soln.size()<<endl;
-        cout << endl;
     }
-    else cout<<"No subset found"<<endl;
-    
+    return dp[n][target];
+
+
+    // if(target == 0) return true;
+    // if(n == 0) return false;
+    // if(nums[n - 1] <= target){
+    //     return (subsetSum(nums, target - nums[n - 1], n - 1) || subsetSum(nums, target, n - 1));
+    // }
+    // return subsetSum(nums, target, n - 1);
 }
 
 int main(){
     int n;
-    cin>>n;
-    int a[n];
-    for(int i; i < n; i++){
-        cin>>a[i];
+    cin >> n;
+    int arr[n];
+    for(int i{}; i < n; i++){
+        cin >> arr[i];
     }
-    int sum;
-    cin>>sum;
-    vector<int> soln;
-    subsetSum(sum,a,n);
+    int c;
+    cin >> c;
+    cout << boolalpha << subsetSum(arr, c, n) << endl;
     return 0;
 }
