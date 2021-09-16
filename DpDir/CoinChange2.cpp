@@ -11,21 +11,27 @@ int coinChange(int coins[], int n, int target){
     //     return (coinChange(coins, n - 1, target) + coinChange(coins, n, target - coins[n - 1]));
     // }
     // return coinChange(coins, n - 1, target);
-    int dp[target + 1];
-    dp[0] = 1;
-    for(int i = 1; i <= target; i++) dp[i] = 0;
-    for(int i{0}; i < n; i++){
-        for(int j{1}; j <= target; j++){
-            if(coins[i] <= j && dp[j - coins[i]]){
-                dp[j] += dp[j - coins[i]];
+    long long dp[n + 1][target + 1];
+    dp[0][0] = 0;
+    for(int i{}; i <= n; i++){
+        for(int j{}; j <= target; j++){
+            if((i == 0 && j == 0) || j == 0){
+                dp[i][j] = 0;
+            }
+            else if(i == 0) dp[i][j] = LLONG_MAX - 1;
+            else{
+                dp[i][j] = dp[i - 1][j];
+                if(coins[i - 1] <= j){
+                    dp[i][j] = min(dp[i - 1][j], 1 + dp[i][j - coins[i - 1]]);
+                }
             }
         }
     }
-    return dp[target];
+    return dp[n][target];
 }
 
 int main(){
-    int coins[] = {1,2,3};
-    cout << coinChange(coins, 3, 5) << endl;
+    int coins[] = {4,5,2, 1, 9};
+    cout << coinChange(coins, 5, 25) << endl;
     return 0;
 }

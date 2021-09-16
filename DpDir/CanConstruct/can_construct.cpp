@@ -11,8 +11,7 @@ bool canConstructUtil(string target, vector<string>& wordBank,unordered_map<stri
     for(size_t i{}; i < wordBank.size(); i++){
         if(target.find(wordBank.at(i)) == 0){
             string nextTarget;
-            if(wordBank.at(i).length() == target.length()) nextTarget = "";
-            else nextTarget = target.substr(wordBank.at(i).length(),target.length()-wordBank.at(i).length());
+            nextTarget = target.substr(wordBank.at(i).length());
             if(canConstructUtil(nextTarget, wordBank,isPossible)) {
                 isPossible[target] = true;
                 return true;
